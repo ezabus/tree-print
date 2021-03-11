@@ -5,7 +5,8 @@ function checkLevelTraversal(input: number[], expectedResult: number[]) {
   const nodes = input.map(
     (value) => new TreeNode<number, number>(value, value)
   );
-  const tree = new BinaryTree(nodes);
+  const tree = new BinaryTree();
+  nodes.forEach((node) => tree.add(node));
   const returnedValues = tree.levelTraverse().map((node) => node.getKey());
   expect(returnedValues).toEqual(expectedResult);
 }
