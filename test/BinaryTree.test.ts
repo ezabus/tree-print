@@ -2,9 +2,7 @@ import BinaryTree from '../src/BinaryTree';
 import TreeNode from '../src/TreeNode';
 
 function checkLevelTraversal(input: number[], expectedResult: number[]) {
-  const nodes = input.map(
-    (value) => new TreeNode<number, number>(value, value)
-  );
+  const nodes = input.map((value) => new TreeNode<number>(value));
   const tree = new BinaryTree();
   nodes.forEach((node) => tree.add(node));
   const returnedValues = tree.levelTraverse().map((node) => node.getKey());
@@ -22,5 +20,16 @@ describe('Binary Tree', () => {
     cases.forEach((caseData) =>
       checkLevelTraversal(caseData.input, caseData.expectedResult)
     );
+  });
+
+  test('tree printing', () => {
+    const input = [100, 15, 190, 171, 3, 91, 205, 155, 13, 17, 203];
+    const nodes = input.map((value) => new TreeNode<number>(value));
+    const tree = new BinaryTree();
+    nodes.forEach((node) => tree.add(node));
+    const printing = tree.print();
+    const expectedResult =
+      '         100\n   15             190\n3      91      171      205\n 13  17     155      203';
+    expect(printing).toEqual(expectedResult);
   });
 });

@@ -1,24 +1,18 @@
 import AbstractTreeNode from './AbstractTreeNode';
 
-class TreeNode<K, V> implements AbstractTreeNode<K> {
+class TreeNode<K> implements AbstractTreeNode<K> {
   key: K;
-  value?: V;
-  parent?: TreeNode<K, V>;
-  left?: TreeNode<K, V>;
-  right?: TreeNode<K, V>;
+  parent?: TreeNode<K>;
+  left?: TreeNode<K>;
+  right?: TreeNode<K>;
 
   constructor(
     key: K,
-    value?: V,
-    parent?: TreeNode<K, V>,
-    left?: TreeNode<K, V>,
-    right?: TreeNode<K, V>
+    parent?: TreeNode<K>,
+    left?: TreeNode<K>,
+    right?: TreeNode<K>
   ) {
     this.key = key;
-    this.value = value;
-    if (value) {
-      this.value = value;
-    }
     if (parent) {
       this.parent = parent;
     }
@@ -38,35 +32,27 @@ class TreeNode<K, V> implements AbstractTreeNode<K> {
     return this.key;
   }
 
-  public setValue(value: V): void {
-    this.value = value;
-  }
-
-  public getValue(): V | undefined {
-    return this.value;
-  }
-
-  public setParent(parent: TreeNode<K, V>): void {
+  public setParent(parent: TreeNode<K>): void {
     this.parent = parent;
   }
 
-  public getParent(): TreeNode<K, V> | undefined {
+  public getParent(): TreeNode<K> | undefined {
     return this.parent;
   }
 
-  public setRight(right?: TreeNode<K, V>): void {
+  public setRight(right?: TreeNode<K>): void {
     this.right = right;
   }
 
-  public getRight(): TreeNode<K, V> | undefined {
+  public getRight(): TreeNode<K> | undefined {
     return this.right;
   }
 
-  public setLeft(left?: TreeNode<K, V>): void {
+  public setLeft(left?: TreeNode<K>): void {
     this.left = left;
   }
 
-  public getLeft(): TreeNode<K, V> | undefined {
+  public getLeft(): TreeNode<K> | undefined {
     return this.left;
   }
 }

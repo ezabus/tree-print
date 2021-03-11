@@ -1,17 +1,18 @@
 import AbstractTreeNode from './AbstractTreeNode';
 import AbstractBinaryTree from './AbstractBinaryTree';
 import Queue from './Queue';
+import PrintableTreeNode from './PrintableTreeNode';
 
 class BinaryTree<K> implements AbstractBinaryTree<K> {
-  nodes: AbstractTreeNode<K>[];
-  root?: AbstractTreeNode<K>;
+  nodes: PrintableTreeNode<K>[];
+  root?: PrintableTreeNode<K>;
   leftHeight: number;
   rightHeight: number;
 
   constructor(nodes?: AbstractTreeNode<K>[]) {
     this.nodes = [];
     if (nodes) {
-      this.nodes = nodes;
+      this.nodes = nodes.map(this.wrapNode);
     }
     this.leftHeight = 0;
     this.rightHeight = 0;
@@ -19,12 +20,19 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
   }
 
   public add(node: AbstractTreeNode<K>): void {
-    this.nodes.push(node);
+    const wrappedNode = this.wrapNode(node);
+    this.nodes.push(wrappedNode);
     if (!this.root) {
-      this.root = node;
+      this.root = wrappedNode;
       return;
     }
-    this.appendNode(this.root, node);
+    this.appendNode(this.root, wrappedNode);
+  }
+
+  private wrapNode(node: AbstractTreeNode<K>) {
+    const printableNode = new PrintableTreeNode(node.getKey());
+    printableNode.setOriginalNode(node);
+    return printableNode;
   }
 
   public search(key: K): AbstractTreeNode<K> | void {
@@ -32,7 +40,27 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
   }
 
   public print(): string {
-    return '';
+    this.preparePrintingInfo();
+    const result = this.levelTraverseWrappedNodes().reduce(
+      (accum, node) => {
+        if (node.getLevel() !== accum.curLevel) {
+          accum.printing += accum.levelPrinting + '\n';
+          accum.levelPrinting = '';
+          accum.curLevel = node.getLevel();
+        }
+        accum.levelPrinting += this.generateWhiteSpaces(
+          node.getOffset() - accum.levelPrinting.length
+        );
+        accum.levelPrinting += node.getKey();
+        return accum;
+      },
+      {
+        curLevel: 0,
+        levelPrinting: '',
+        printing: ''
+      }
+    );
+    return result.printing + result.levelPrinting;
   }
 
   private buildTree(): void {
@@ -89,25 +117,85 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
   }
 
   public levelTraverse(): AbstractTreeNode<K>[] {
+    return this.levelTraverseWrappedNodes().map((node) =>
+      node.getOriginalNode()
+    );
+  }
+
+  public levelTraverseWrappedNodes(): PrintableTreeNode<K>[] {
     if (!this.root) {
       return [];
     }
-    const visitedNodes: AbstractTreeNode<K>[] = [];
-    const queue = new Queue<AbstractTreeNode<K>>();
+    const visitedNodes: PrintableTreeNode<K>[] = [];
+    const queue = new Queue<PrintableTreeNode<K>>();
     queue.enqueue(this.root);
     while (!queue.isEmpty()) {
       const curNode = queue.dequeue();
       visitedNodes.push(curNode);
       const leftNode = curNode.getLeft();
       if (leftNode) {
-        queue.enqueue(leftNode);
+        queue.enqueue(leftNode as PrintableTreeNode<K>);
       }
       const rightNode = curNode.getRight();
       if (rightNode) {
-        queue.enqueue(rightNode);
+        queue.enqueue(rightNode as PrintableTreeNode<K>);
       }
     }
     return visitedNodes;
+  }
+
+  private preparePrintingInfo(): void {
+    const root = this.root;
+    if (!root) {
+      return;
+    }
+    this.updatePrintingInfo(root);
+  }
+
+  private updatePrintingInfo(
+    curNode: PrintableTreeNode<K>,
+    offset = 0,
+    curLevel = 0
+  ): number {
+    const left = curNode.getLeft() as PrintableTreeNode<K>;
+    if (left) {
+      const leftDeltaOffset = this.updatePrintingInfo(
+        left,
+        offset,
+        curLevel + 1
+      );
+      offset = leftDeltaOffset;
+    }
+    this.addPrintingInfo(curNode, offset, curLevel);
+    const deltaOffset = new String(curNode.getKey()).length;
+    offset += deltaOffset;
+    const right = curNode.getRight() as PrintableTreeNode<K>;
+    if (right) {
+      const rightDeltaOffset = this.updatePrintingInfo(
+        right,
+        offset,
+        curLevel + 1
+      );
+      offset = rightDeltaOffset;
+    }
+    return offset;
+  }
+
+  private addPrintingInfo(
+    node: PrintableTreeNode<K>,
+    offset: number,
+    level: number
+  ): void {
+    node.setOffset(offset);
+    node.setLevel(level);
+  }
+
+  private generateWhiteSpaces(numberOfSpaces: number) {
+    let whiteSpaceString = '';
+    for (let i = 0; i < numberOfSpaces; i++) {
+      whiteSpaceString += ' ';
+    }
+    return whiteSpaceString;
   }
 }
 
