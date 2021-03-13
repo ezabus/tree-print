@@ -27,12 +27,36 @@ describe('Binary Tree', () => {
     );
   });
 
-  test('tree printing', () => {
+  test('tree printing, case from task', () => {
     const input = [100, 15, 190, 171, 3, 91, 205, 155, 13, 17, 203];
     const tree = createTree(input);
     const printing = tree.print();
     const expectedResult =
       '         100\n   15             190\n3      91      171      205\n 13  17     155      203';
+    expect(printing).toEqual(expectedResult);
+  });
+
+  test('tree printing, all left case', () => {
+    const input = [100, 50, 25, 10, 1];
+    const tree = createTree(input);
+    const printing = tree.print();
+    const expectedResult = '       100\n     50\n   25\n 10\n1';
+    expect(printing).toEqual(expectedResult);
+  });
+
+  test('tree printing, all right case', () => {
+    const input = [1, 10, 25, 50, 100];
+    const tree = createTree(input);
+    const printing = tree.print();
+    const expectedResult = '1\n 10\n   25\n     50\n       100';
+    expect(printing).toEqual(expectedResult);
+  });
+
+  test('tree printing, arrow shape case', () => {
+    const input = [25, 10, 1, 50, 100];
+    const tree = createTree(input);
+    const printing = tree.print();
+    const expectedResult = '   25\n 10  50\n1      100';
     expect(printing).toEqual(expectedResult);
   });
 
