@@ -36,7 +36,7 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
   }
 
   public search(key: K): AbstractTreeNode<K> | void {
-    return this.findNode(key, this.root);
+    return this.breadthFirstSearch(key);
   }
 
   public print(): string {
@@ -101,19 +101,27 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
     }
   }
 
-  private findNode(
-    key: K,
-    curNode?: AbstractTreeNode<K>
-  ): AbstractTreeNode<K> | void {
-    if (!curNode) {
+  private breadthFirstSearch(key: K): AbstractTreeNode<K> | void {
+    if (!this.root) {
       return;
     }
-    if (curNode?.getKey() === key) {
-      return curNode;
+    const queue = new Queue<PrintableTreeNode<K>>();
+    queue.enqueue(this.root);
+    while (!queue.isEmpty()) {
+      const curNode = queue.dequeue();
+      if (curNode.getKey() === key) {
+        return curNode.getOriginalNode();
+      }
+      const leftNode = curNode.getLeft();
+      if (leftNode) {
+        queue.enqueue(leftNode as PrintableTreeNode<K>);
+      }
+      const rightNode = curNode.getRight();
+      if (rightNode) {
+        queue.enqueue(rightNode as PrintableTreeNode<K>);
+      }
     }
-    const nextNode =
-      key < curNode.getKey() ? curNode.getLeft() : curNode.getRight();
-    return this.findNode(key, nextNode);
+    return;
   }
 
   public levelTraverse(): AbstractTreeNode<K>[] {
