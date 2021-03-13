@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Impelment some methods of binary search tree with no parent links which will meet the following requirements:
+Impelment some methods of binary search tree with no parent links, which will meet the following requirements:
 
 * Method add. Adds node to the tree
 * Method search. Must be implemented by **level traversal**
@@ -18,3 +18,25 @@ Impelment some methods of binary search tree with no parent links which will mee
    13  17     155      203
   ```
   Please note: elements could have arbitrary lenght, tree could be unbalanced, there should be no extra spaces or indentations between subtrees of the tree.
+
+## Installation
+
+**Prerequisits**
+* node v12 and higher
+* npm v7 and higher
+
+**Instalation steps**
+
+* Cloning the repo
+  ```bash
+  git clone https://github.com/ezabus/tree-print
+  ```
+* Installing dependencies
+  ``` bash
+  npm install
+  ```
+* Running tests
+  ```
+  npm run test
+  ```
+
