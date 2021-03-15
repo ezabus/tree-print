@@ -29,7 +29,15 @@ class BinaryTree<K> implements AbstractBinaryTree<K> {
     this.appendNode(this.root, wrappedNode);
   }
 
-  private wrapNode(node: AbstractTreeNode<K>) {
+  /**
+   * Wraps provided tree node in PrintableTreeNode
+   * We need PrintableTreeNode to store information
+   * regarding level and offset
+   *
+   * @param node
+   * @returns PrintableTreeNode<K> printable tree node
+   */
+  private wrapNode(node: AbstractTreeNode<K>): PrintableTreeNode<K> {
     const printableNode = new PrintableTreeNode(node.getKey());
     printableNode.setOriginalNode(node);
     return printableNode;

@@ -40,3 +40,22 @@ Impelment some methods of binary search tree with no parent links, which will me
   npm run test
   ```
 
+## Solution
+
+The main logic of this solution is implemented in ``BinaryTree.ts`` file.
+
+**Tree Pringing**
+
+* ``TreeNodes`` are created and passed to ``BinaryTree`` via ``add`` method
+* Nodes are added "as is" without balancing since it is required to print an arbitrary
+tree structure
+* When ``print`` method is called, we need to calculate the level and the horizontal offset of each node. We can calculate the offset of a particular node with the following formula (nodes a sorted by key):
+  ```
+    offset(N[i]) = sum(len(N[0]) .. len(N[i - 1]))
+  ```
+  We also need to count the level of each node. It is possible to calculate both offset and level by performing tree sort.
+* After collecting printing information, level travesal is called and printed tree is generated.
+
+**Search**
+
+* Search is implemented by level traversal as it was requested in problem statement. Therefore the time complexity of this search is *O(n)*.
